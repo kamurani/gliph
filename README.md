@@ -66,18 +66,18 @@ Options
 -------
 
 Required Data Inputs
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 The user must provide a table of TCR sequences. 
 
-  --tcr TCR_TABLE
+`  --tcr TCR_TABLE`
 
 The format of the table is tab delimited, expecting the following columns in this 
 order. Only TCRb is required for the primary component of the algorithm to function, 
 but patient identity is required for HLA prediction. 
 
 Example:
-
+```csv
 CDR3b		TRBV	TRBJ	CDR3a		TRAV		TRAJ	Patient Counts
 CAADTSSGANVLTF	TRBV30	TRBJ2-6	CALSDEDTGRRALTF	TRAV19		TRAJ5	09/0217 1
 CAATGGDRAYEQYF	TRBV2	TRBJ2-7	CAASSGANSKLTF	TRAV13-1	TRAJ56	03/0492 2 
@@ -87,31 +87,31 @@ CAGGKGNSPLHF	TRBV2	TRBJ1-6	CVVLRGGSQGNLIF	TRAV12-1	TRAJ42	02/0207 1
 CAGQILAGSDTQYF	TRBV6-4	TRBJ2-3	CATASGNTPLVF	TRAV17		TRAJ29	09/0018 1
 CAGRTGVSTDTQYF	TRBV5-1	TRBJ2-3	CAVTPGGGADGLTF	TRAV41		TRAJ45	02/0259 1
 CAGYTGRANYGYTF	TRBV2	TRBJ1-2	CVVNGGFGNVLHC	TRAV12-1	TRAJ35	01/0873 3
-
+```
 
 Optional Data Inputs
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 The user may additional supply a table of HLA genotyping for each subject.
 
-`--hla HLA_TABLE`
+`  --hla HLA_TABLE`
 
 The format of the table is tab delimited, with each row beginning with the identity
 of a subject, and then two or more following column providing HLA identification. 
 The number of total columns (HLA defined genotypes) is flexible. 
 
 Example:
-
+```tsv
 09/0217	DPA1*01:03	DPA1*02:02	DPB1*04:01	DPB1*14:01	DQA1*01:02
 09/0125	DPA1*02:02	DPA1*02:02	DPB1*05:01	DPB1*05:01	DQA1*06:01
 03/0345	DPA1*02:01	DPA1*02:01	DPB1*17:01	DPB1*01:01	DQA1*01:03
 03/0492	DPA1*01:03	DPA1*02:01	DPB1*03:01	DPB1*11:01	DQA1*01:02
 02/0259	DPA1*01:03	DPA1*01:03	DPB1*104:01	DPB1*02:01	DQA1*02:01
-
+```
 
 Optional Arguments
-~~~~~~~~~~~~~~~~~~~
-
+------------------
+```
   --refdb DB             optional alternative reference database
 
   --gccutoff=1           global covergence distance cutoff. This is the maximum
@@ -180,19 +180,19 @@ Optional Arguments
   --vgene_stratify=0     Stratify by shared V-gene frequency distribution (Default 0)
  
   --public_tcrs=0        Reward motifs in public TCRs (Default 0)
-
+```
 Controlling Output
-~~~~~~~~~~~~~~~~~~
+------------------
 
 GLIPH produces multiple output files. 
 
-  --output FILE          Place command output into the named file.
+`  --output FILE          Place command output into the named file.`
 
-  --verbose              Have *tmo* print messages describing
+`  --verbose              Have *tmo* print messages describing`
                          
 
 Definitions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------
 
 Convergence group  - a set of multiple TCRs from one or more individuals that bind
 	  	     the same antigen in a similar manner through similar TCR 
@@ -224,7 +224,7 @@ Sample set         - The input collection of TCRs under evaluation that are
 		     reference set. 
 
 Function of Algorithm
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 GLIPH first makes the input sample set non-redundant at the CDR3 amino acid level.
 The identity of the V-genes, the J-genes, the clonal frequencies, and the associated
@@ -249,15 +249,16 @@ the reference set, to assign a probability to each hamming distance that sequenc
 of that distance are likely to appear randomly. 
 
 Example: after analysis, it is found that out of 1000 simulations
-
+```
    hamming distance in-test-set  in-ref-set    probability
    1                 14          0             0.001
    2                 37          8+/-3         0.02
    3                 194         147+/-35      0.24
-
+```
 GLIPH then selects a maximum hamming distance cutoff for grouping similar TCRs. 
 
-NOTE: For the standard reference set this analysis has been precomputed for a range
+> [!NOTE]
+> For the standard reference set this analysis has been precomputed for a range
 of sampling depths, enabling a lookup table rather than simulation as a runtime
 accelerator. 
  
@@ -269,6 +270,7 @@ the reference set.
 
 Example: for a scan of the following CDR3, the following 3mers would be collected 
 
+```
   CAS SFGSGGHYE TYF
   xxx|SFGSGGHYE|xxx
       SFG
@@ -287,7 +289,7 @@ Example: for a scan of the following CDR3, the following 3mers would be collecte
       S.GS
        F.SG
       (etc)
-
+```
 The frequences off all motifs across the sample set are calculated. 
 
 In order to establish whether these motifs are just naturally abundant or specifically
@@ -300,7 +302,7 @@ motif frequency means u become normally distributed and this result is equivalen
 to calculating the frequencies of all motifs in the reference database, and then calculating
 one-sided confidence intervals for expected frequencies of any given motif in the reference
 database at any given sampling depth:
-   
+```
                _
 CI(99.9% os) = y + t        (s / sqrt(n))
                  -  0.0005
@@ -314,6 +316,7 @@ s =   |  \   (y1 - y)
       | --------------
      \|   (n - 1)
 
+```
 This approximation provides a runtime acceleration.
 
 GLIPH then compares the probability that each motif in the sample set would have appeared
@@ -323,7 +326,7 @@ random samplings, or alternatively though the CI).
 
 GLIPH next generates a network of all CDR3s as nodes, and all edges as either global or
 local interactions. The clusters can be optionally filtered with the following arguements
-
+```
   --positional_motifs=0  Restrict motif edges to CDR3s where the motif is in a shared 
 			 position that is fixed from the N-terminal end of CDR3
 
@@ -333,14 +336,14 @@ local interactions. The clusters can be optionally filtered with the following a
 
   --global_vgene=0       Restricts global relationships to TCRs of common V-gene
 			 Recommended but invalidates V-gene probability score
-
+```
 GLIPH then scores each individual cluster (candidate convergence group) by evaluating a
 set of features that are independet of the CDR3 observations, assigning a probability 
 p to each feature, and then combining those probabilities into a single score by conflation. 
 
 For tests i through N, testing Pi(X=C) probability that cluster X is convergent, the combined
 conflation score is given as
-
+```
                       __N
 P(X=C) =              ||  P (X=C)
                         i  i
@@ -349,6 +352,7 @@ P(X=C) =              ||  P (X=C)
             ||  P (X=C)  +  ||  P (X!=C)
               i  i            i  i
 
+```
 The individual Pi(X=C) tests include 
 
 1) global similarity probability
@@ -383,7 +387,7 @@ from the total dataset, we perform repeat random sampling at sample size n from 
 total dataset, each time obtaining the V-genes for each clone and calculating a 
  V-gene Simpson's Diversity Index D for each sample, where D is interpreted as the probability
 that any two members within the cluster would share a V-gene and is calculated as
-
+```
       __V
      \   v(v-1)
      /__1
@@ -391,7 +395,7 @@ D = -----------
       __V
      \   n(n-1)
      /__1
-
+```
 where V is the number of all V-genes, v is the total counts of a given v-gene, and n 
 is the sampling size (cluster size). 
  
@@ -409,7 +413,7 @@ from the total dataset, we perform repeat random sampling at sample size n from 
 total dataset, each time obtaining the CDR3 lengths for each clone and calculating a
  V-gene Simpson's Diversity Index D for each sample, where D is interpreted as the probability
 that any two members within the cluster would share a CDR3length and is calculated as
-
+```
       __C
      \   c(c-1)
      /__1
@@ -417,7 +421,7 @@ D = -----------
       __C
      \   n(n-1)
      /__1
-
+```
 where C is the number of all CDR3 lengths, c is the total counts of a given CDR3 length, 
 and n is the sampling size (cluster size).
 
@@ -467,22 +471,24 @@ Examples
 --------
 
 To run GLIPH on a TCR_TABLE file mytcrtable.txt, run:
-gliph-group-discovery.pl --tcr mytcrtable.txt
+`gliph-group-discovery.pl --tcr mytcrtable.txt`
 
 Tun run GLIPH on a list of CDR3s mycdr3list.txt, run:
-gliph-group-discovery.pl --tcr mycdr3list.txt
+`gliph-group-discovery.pl --tcr mycdr3list.txt`
 
 To run GLIPH with an alternative mouse reference DB mouseDB.fa, run:
-gliph-group-discovery.pl --tcr mytcrtable --refdb=mouseDB.fa
+`gliph-group-discovery.pl --tcr mytcrtable --refdb=mouseDB.fa`
                                        
 To run GLIPH slower with a more thorough simdepth, run
-gliph-group-discovery.pl --tcr mytcrtable.txt --simdepth=10000
+`gliph-group-discovery.pl --tcr mytcrtable.txt --simdepth=10000`
 
 To run GLIPH slower with a more thorough simdepth and an altered lcminp, run
-gliph-group-discovery.pl --tcr mytcrtable.txt --simdepth=10000 --lcminp=0.001
+`gliph-group-discovery.pl --tcr mytcrtable.txt --simdepth=10000 --lcminp=0.001`
 
 To score GLIPH clusters, run 
+```
   gliph-group-scoring.pl --convergence_file TCR_TABLE-convergence-groups.txt \
                          --clone_annotations TCR_TABLE \
                          --hla_file HLA_TABLE \
                          --motif_pval_file TCR_TABLE.minp.ove10.txt
+```
