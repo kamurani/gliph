@@ -54,10 +54,10 @@ gliph/bin/gliph-group-discovery.pl
 gliph/bin/gliph-group-scoring.pl
 ```
 
-Optionally, for added convenience, you could add the path to your gliph/bin
-directory to your system $PATH.  
+Optionally, for added convenience, you could add the path to your `gliph/bin`
+directory to your system `$PATH`.  
 
-```
+```bash
 # added to shell config file:
 export PATH="$PATH:~/path/to/gliph/bin"
 ```
