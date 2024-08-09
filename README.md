@@ -13,21 +13,21 @@ Name
 
 Synopsis
 --------
-
+```
   gliph-group-discovery.pl [options ] --tcr TCR_TABLE
 
   gliph-group-scoring.pl --convergence_file TCR_TABLE-convergence-groups.txt \
                          --clone_annotations TCR_TABLE \
                          --hla_file HLA_TABLE \
-                         --motif_pval_file TCR_TABLE.minp.ove10.txt
-
+                         --motif_pval_file TCR_TABLE.minp.ove10.txt \
+```
 Description
 -----------
 
 GLIPH clusters TCRs that are predicted to bind the same MHC-restricted
 peptide antigen. When multiple donors have contributed to the clusters,
-and HLA genotypes for those donors are available, GLIPH additionally 
-can provide predictions of which HLA-allele is presenting the antigen.
+and HLA genotypes for those donors are available, GLIPH can additionally 
+provide predictions of which HLA-allele is presenting the antigen.
 
 Typically the user will pass in a sequence set of hundreds to thousands
 of TCR sequences. This dataset will be analyzed for very similar TCRs,
@@ -45,15 +45,22 @@ Installation
 
 First, unpack gliph:
 
-tar -xzvf gliph-1.0.tgz
+`tar -xzvf gliph-1.0.tgz`
 
 You are done. The gliph commands are found in 
              
+```
 gliph/bin/gliph-group-discovery.pl
 gliph/bin/gliph-group-scoring.pl
+```
 
 Optionally, for added convenience, you could add the path to your gliph/bin
 directory to your system $PATH.  
+
+```
+# added to shell config file:
+export PATH="$PATH:~/path/to/gliph/bin"
+```
 
 Options
 -------
@@ -87,7 +94,7 @@ Optional Data Inputs
 
 The user may additional supply a table of HLA genotyping for each subject.
 
-  --hla HLA_TABLE
+`--hla HLA_TABLE`
 
 The format of the table is tab delimited, with each row beginning with the identity
 of a subject, and then two or more following column providing HLA identification. 
